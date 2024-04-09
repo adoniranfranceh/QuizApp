@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
 import { useContext } from "react";
 import { QuizContext } from "../context/quiz";
+import './Question.css'
 
 const Question = () => {
   const [quizState, dispatch] = useContext(QuizContext);
@@ -15,7 +16,7 @@ const Question = () => {
       <h2>{currentQuestion.question}</h2>
       <div id="options-container">
         <p>Opções</p>
-        <button>Continuar</button>
+        <button onClick={ () => dispatch({ type: 'CHANGE_QUESTION' }) }>Continuar</button>
       </div>
     </div>
     )

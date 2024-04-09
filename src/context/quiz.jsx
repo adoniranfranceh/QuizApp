@@ -7,6 +7,7 @@ const STAGES = ['Start', 'Playing', 'End']
 const initialStage = {
   gameStage: STAGES[0],
   questions,
+  currentQuestion: 0,
 };
 
 const quizReducer = (stage, action) => {
@@ -15,7 +16,7 @@ const quizReducer = (stage, action) => {
   switch(action.type) {
     case 'CHANGE_STAGE':
       return {
-        stage,
+        ...stage,
         gameStage: STAGES[1],
       };
     default:

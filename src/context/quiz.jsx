@@ -12,7 +12,6 @@ const initialStage = {
 };
 
 const quizReducer = (stage, action) => {
-  console.log(stage, action);
 
   switch(action.type) {
     case 'CHANGE_STAGE':
@@ -47,6 +46,22 @@ const quizReducer = (stage, action) => {
 
     case 'NEW_GAME':
       return initialStage
+
+    case 'CHECK_ANSWER':
+      if(stage.answerSelected) return stage;
+      console.log(action)
+
+      const answer = action.payload.answer
+      const option = action.payload.option
+      let correctAnswer = 0
+
+      if(answer === option) correctAnswer = 1;
+
+      return {
+        ...stage,
+        score: stage.score + correctAnswer,
+        answerSelected: option,
+      };
 
     default:
       return stage;

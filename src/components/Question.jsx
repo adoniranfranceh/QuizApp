@@ -24,8 +24,8 @@ const Question = () => {
       <h2>{currentQuestion.question}</h2>
       <div id="options-container">
         {currentQuestion.options.map((option) => (
-          <Option 
-            option={option} 
+          <Option
+            option={option}
             key={option}
             answer={currentQuestion.answer}
             selectOption={() => onSelectOption(option)}

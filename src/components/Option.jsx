@@ -7,10 +7,10 @@ const Options = ({ option, answer, selectOption }) => {
   const [quizStage, dispath] = useContext(QuizContext);
 
   return (
-    <div className="option"
+    <div
       className={`option ${
-        quizStage.answerSelected && option === answer ? 'correct' : ''}
-      ${quizStage.answerSelected && option !== answer ? 'wrong' : ''} `}
+        quizStage.answerSelected && option === answer ? 'correct' : 'wrong'}
+       `}
       onClick={() => selectOption()}>
       <p>{option}</p>
     </div>

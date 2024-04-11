@@ -9,8 +9,9 @@ const Options = ({ option, answer, selectOption }) => {
   return (
     <div
       className={`option ${
-        quizStage.answerSelected && option === answer ? 'correct' : 'wrong'}
-       `}
+        quizStage.answerSelected && option === answer ? 'correct' : ''}
+       ${
+        quizStage.answerSelected && option !== answer ? 'wrong' : ''}`}
       onClick={() => selectOption()}>
       <p>{option}</p>
     </div>

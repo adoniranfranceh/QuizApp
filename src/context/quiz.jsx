@@ -1,56 +1,70 @@
 import { createContext, useReducer } from "react";
 
-import questions from '../data/questions'
+import questions from '../data/questions_complete'
 
-const STAGES = ['Start', 'Playing', 'End']
+const STAGES = ['Start', 'Category', 'Playing', 'End']
 
-const initialStage = {
+const initialState = {
   gameStage: STAGES[0],
   questions,
   currentQuestion: 0,
   score: 0,
 };
 
-const quizReducer = (stage, action) => {
+const quizReducer = (state, action) => {
 
   switch(action.type) {
-    case 'CHANGE_STAGE':
+    case "CHANGE_STAGE":
       return {
-        ...stage,
+        ...state,
         gameStage: STAGES[1],
       };
 
+    case "START_GAME":
+      let quizQuestions = null;
+
+      state.questions.forEach((question) => {
+        if (question.category === action.payload) {
+          quizQuestions = question.questions;
+        }
+      });
+
+      return {
+        ...state,
+        questions: quizQuestions,
+        gameStage: STAGES[2],
+      };
+
     case 'REORDER_QUESTIONS':
-      const reorderedQuestions = questions.sort(() => {
+      const reorderedQuestions = state.questions.sort(() => {
         return Math.random() - 0.5;
       });
 
       return {
-        ...stage,
+        ...state,
         questions: reorderedQuestions,
       };
 
     case 'CHANGE_QUESTION':
-      const nextQuestion = stage.currentQuestion + 1;
+      const nextQuestion = state.currentQuestion + 1;
       let endGame = false;
 
-      if(!questions[nextQuestion]){
+      if(!state.questions[nextQuestion]){
         endGame = true;
       }
 
       return {
-        ...stage,
+        ...state,
         currentQuestion: nextQuestion,
-        gameStage: endGame ? STAGES[2] : stage.gameStage,
+        gameStage: endGame ? STAGES[3] : state.gameStage,
         answerSelected: false,
       };
 
     case 'NEW_GAME':
-      return initialStage
+      return initialState
 
     case 'CHECK_ANSWER':
-      if(stage.answerSelected) return stage;
-      console.log(action)
+      if(state.answerSelected) return state;
 
       const answer = action.payload.answer
       const option = action.payload.option
@@ -59,20 +73,20 @@ const quizReducer = (stage, action) => {
       if(answer === option) correctAnswer = 1;
 
       return {
-        ...stage,
-        score: stage.score + correctAnswer,
+        ...state,
+        score: state.score + correctAnswer,
         answerSelected: option,
       };
 
     default:
-      return stage;
+      return state;
   }
 }
 
 export const QuizContext = createContext()
 
 export const QuizProvider = ({ children }) => {
-  const value = useReducer(quizReducer, initialStage);
+  const value = useReducer(quizReducer, initialState);
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;
 };
